@@ -98,18 +98,18 @@ namespace ExcelToDbAppTest
 			{
 				AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database"));
 				string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "ExcelDatabase.mdf");
-				string sourceFileName = System.IO.Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName, "Database", "ExcelDatabase.mdf");
+				string sourceFileName = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", "ExcelDatabase.mdf");
 				if(!File.Exists(path))
 				{
 					string dir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database");
-					if(!Directory.Exists(dir))
+					if (!Directory.Exists(dir))
 					{
 						Directory.CreateDirectory(dir);
-					} 
-					File.Copy(sourceFileName, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "ExcelDatabase.mdf"));
+					}
+					File.Copy(sourceFileName, path);
 				}
 			}
-			catch { System.Windows.MessageBox.Show("Стоковый файл базы данных не найден"); }
+			catch { System.Windows.MessageBox.Show("База данных не найдена."); }
 		}
 		public void ShowDbInDataGrid()
 		{
@@ -142,6 +142,7 @@ namespace ExcelToDbAppTest
 					{
 						switch (header)
 						{
+							case "Id": ShowDbInDataGrid(); break;
 							case "Birthday": user.Birthday = (e.EditingElement as TextBox)!.Text; break;
 							case "Bonus": user.Bonus = int.Parse((e.EditingElement as TextBox)!.Text); break;
 							case "CardCode": user.CardCode = int.Parse((e.EditingElement as TextBox)!.Text); break;
@@ -157,9 +158,9 @@ namespace ExcelToDbAppTest
 							default: break;
 						}
 					}
-					catch(FormatException fe)
+					catch(FormatException)
 					{
-						System.Windows.MessageBox.Show($"Введите корректный тип для {header} ");
+						System.Windows.MessageBox.Show($"Введите корректный тип для {header}");
 						ShowDbInDataGrid();
 					}
 					catch (Exception ex)
