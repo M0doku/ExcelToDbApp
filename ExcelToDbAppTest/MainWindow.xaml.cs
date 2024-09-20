@@ -101,6 +101,11 @@ namespace ExcelToDbAppTest
 				string sourceFileName = System.IO.Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName, "Database", "ExcelDatabase.mdf");
 				if(!File.Exists(path))
 				{
+					string dir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database");
+					if(!Directory.Exists(dir))
+					{
+						Directory.CreateDirectory(dir);
+					} 
 					File.Copy(sourceFileName, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "ExcelDatabase.mdf"));
 				}
 			}
