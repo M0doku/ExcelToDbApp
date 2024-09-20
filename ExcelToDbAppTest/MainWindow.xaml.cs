@@ -61,14 +61,12 @@ namespace ExcelToDbAppTest
 			OpenFileDialog ofd = new OpenFileDialog();
 			string excelFile = string.Empty;
 			ofd.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				excelFile = ofd.FileName;
-			}
-			else
+			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.Cancel)
 			{
 				System.Windows.MessageBox.Show("Выберите корректный файл");
+				return;
 			}
+			excelFile = ofd.FileName;
 			ExcelMapper excel = new ExcelMapper();
 			var users = (await excel.FetchAsync<User>(excelFile)).ToList();
 			await using var db = new ApplicationContext();
